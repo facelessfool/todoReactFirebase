@@ -16,7 +16,8 @@ const Form =()=>{
    const SubmitHandler = ()=>{
 
         firebase.db.collection("todos").add({
-            todo: note
+            todo: note,
+            // timestamp: firebase.FieldValue.serverTimestamp()
         })
        setNotes([...notes, note])
        setNote("")
@@ -29,13 +30,17 @@ const Form =()=>{
   
     useEffect( ()=>
       { firebase.db.collection('todos').onSnapshot(snap=>{
-        const arr=snap.docs.map(todo=>{
-            const data=todo.data()
-         //    console.log("data: ",data.todo)
-         return data.todo
+        //   console.log(snap.docs)
+        setNotes(snap.docs.map((doc)=>({
+            id: doc.id,
+            todo : doc.data().todo
+            // console.log(`data1: ${data1.todo} `)
+            // console.log("id: ",todo.id)
+
+        
         })
-   
-        setNotes(arr)
+        ))
+        
     })
 
 
